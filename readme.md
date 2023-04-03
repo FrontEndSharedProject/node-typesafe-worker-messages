@@ -2,6 +2,12 @@
 
 Using type-safe worker communication in Node.
 
+# Install
+
+```shell
+$ pnpm add node-typesafe-worker-messages -D
+```
+
 # Features
 
 1. Complete TypeScript support and parameter constraints.
