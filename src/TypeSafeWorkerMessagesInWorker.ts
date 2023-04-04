@@ -28,6 +28,7 @@ export function TypeSafeWorkerMessagesInWorker<
       ? {
           postMessage(...args) {
             console.log("postMessage", args);
+            return Promise.resolve()
           },
           on(...args) {
             console.log("on", args);
