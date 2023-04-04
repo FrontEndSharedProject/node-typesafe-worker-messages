@@ -21,7 +21,7 @@ export function TypeSafeWorkerMessagesInWorker<
 >(
   parentPort: MessagePort
 ): MessagePort & ExtendType<ParentMessage, WorkerMessage> {
-  const isMainThread = parentPort === undefined;
+  const isMainThread = !parentPort;
   //  @ts-ignore
   const parent: MessagePort & ExtendType<ParentMessage, WorkerMessage> =
     isMainThread
