@@ -2,12 +2,14 @@ lockfileVersion: 5.4
 
 specifiers:
   '@types/node': ^18.15.11
+  electron-log: ^4.4.8
   prettier: ^2.8.7
   typescript: ^4.9.3
   vite: ^4.2.0
 
 devDependencies:
   '@types/node': 18.15.11
+  electron-log: 4.4.8
   prettier: 2.8.7
   typescript: 4.9.5
   vite: 4.2.1_@types+node@18.15.11
@@ -214,6 +216,10 @@ packages:
 
   /@types/node/18.15.11:
     resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
+    dev: true
+
+  /electron-log/4.4.8:
+    resolution: {integrity: sha512-QQ4GvrXO+HkgqqEOYbi+DHL7hj5JM+nHi/j+qrN9zeeXVKy8ZABgbu4CnG+BBqDZ2+tbeq9tUC4DZfIWFU5AZA==}
     dev: true
 
   /esbuild/0.17.15:

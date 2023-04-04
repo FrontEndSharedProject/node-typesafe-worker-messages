@@ -1,10 +1,10 @@
-import { MessageType, UniqueId, MessageObj } from "./types";
+import { MessageType, UniqueId, MessageObj, LoggerType } from "./types";
 import { MessagePort } from "worker_threads";
 
-type ExtendType<
+interface ExtendType<
   ParentMessage extends MessageObj<ParentMessage>,
   WorkerMessage extends MessageObj<WorkerMessage>
-> = {
+> extends LoggerType {
   send<T extends keyof WorkerMessage>(
     name: T,
     ...payload: Parameters<WorkerMessage[T]>
@@ -13,7 +13,7 @@ type ExtendType<
     name: T,
     fn: (...args: Parameters<ParentMessage[T]>) => ReturnType<ParentMessage[T]>
   ): void;
-};
+}
 
 export function TypeSafeWorkerMessagesInWorker<
   ParentMessage extends MessageObj<ParentMessage>,
@@ -100,7 +100,23 @@ export function TypeSafeWorkerMessagesInWorker<
     }
   });
 
+  function logger(level) {
+    return function (...args) {
+      parent.postMessage({
+        from: UniqueId,
+        type: "logger",
+        name: level,
+        payload: args,
+      });
+    };
+  }
+
   parent.send = send;
   parent.handle = handle;
+
+  parent.error = logger("error");
+  parent.warn = logger("warn");
+  parent.info = logger("info");
+  parent.log = logger("log");
   return parent;
 }

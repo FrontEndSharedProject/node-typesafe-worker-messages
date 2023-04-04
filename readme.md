@@ -52,7 +52,10 @@ const worker = new TypeSafeWorkerMessagesInMain<ParentMessage, WorkerMessage>(
   join(__dirname, "worker.cjs"),
   {
     workerData: { foo: "bar" },
-  }
+  },
+  //  pass you own logger here
+  //  like electron-log, defualt is using console
+  logger
 );
 
 //  All methods are the same as worker_threads
@@ -108,6 +111,11 @@ parent.handle("printDataFromWorker", (...args) => {
 parent.handle("getWorkTasksList", () => {
   return Promise.resolve(["1", "2222"]);
 });
+
+parent.error("log error")
+parent.warn("log warn")
+parent.info("log info")
+parent.log("log log")
 
 setTimeout(() => {
   parent.send("getUserInfoById", "44").then((res) => {

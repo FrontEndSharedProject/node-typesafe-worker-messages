@@ -1,4 +1,4 @@
-import { MessageType, UniqueId, MessageObj } from "./types";
+import { MessageType, UniqueId, MessageObj, LoggerType } from "./types";
 import { Worker, WorkerOptions } from "worker_threads";
 
 export class TypeSafeWorkerMessagesInMain<
@@ -11,9 +11,15 @@ export class TypeSafeWorkerMessagesInMain<
   callbackIncreaseId: number = 0;
   //  @ts-ignore
   callbackWaitingMap: Record<number, Function> = {};
+  logger: LoggerType;
 
-  constructor(filename: string | URL, options?: WorkerOptions) {
+  constructor(
+    filename: string | URL,
+    options?: WorkerOptions,
+    logger?: LoggerType
+  ) {
     super(filename, options);
+    this.logger = logger ?? console;
     this._bindMessage();
   }
 
@@ -79,6 +85,11 @@ export class TypeSafeWorkerMessagesInMain<
         this.callbackWaitingMap[payload.cbId](payload.payload);
         delete this.callbackWaitingMap[payload.cbId];
       }
+    }
+
+    //  logger
+    if (payload.type === "logger") {
+      this.logger[payload.name](...payload.payload);
     }
   }
 }
