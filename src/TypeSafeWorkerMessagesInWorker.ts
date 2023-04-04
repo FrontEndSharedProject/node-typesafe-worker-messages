@@ -21,9 +21,19 @@ export function TypeSafeWorkerMessagesInWorker<
 >(
   parentPort: MessagePort
 ): MessagePort & ExtendType<ParentMessage, WorkerMessage> {
+  const isMainThread = parentPort === undefined;
   //  @ts-ignore
   const parent: MessagePort & ExtendType<ParentMessage, WorkerMessage> =
-    parentPort;
+    isMainThread
+      ? {
+          postMessage(...args) {
+            console.log("postMessage", args);
+          },
+          on(...args) {
+            console.log("on", args);
+          },
+        }
+      : parentPort;
   const listeners: Partial<Record<keyof ParentMessage, any>> = {};
   let callbackIncreaseId: number = 0;
   const callbackWaitingMap: Record<number, Function> = {};
@@ -33,6 +43,7 @@ export function TypeSafeWorkerMessagesInWorker<
     ...payload: Parameters<WorkerMessage[T]>
   ): Promise<Awaited<ReturnType<WorkerMessage[T]>>> {
     const callbackID = callbackIncreaseId;
+
     parent.postMessage({
       from: UniqueId,
       type: "message",
